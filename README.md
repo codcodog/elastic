@@ -22,12 +22,12 @@ $ curl -H "Content-Type: application/json" -XPOST "localhost:9200/bank/_doc/_bul
 
 ### 基础
 
-查询索引结构
+1. 查询索引结构
 ```
 GET /bank/_mapping
 ```
 
-获取所有数据，并根据 `account_number` 降序排序
+2. 获取所有数据，并根据 `account_number` 降序排序
 ```
 GET /bank/_search
 {
@@ -41,5 +41,72 @@ GET /bank/_search
       }
     }
   ]
+}
+```
+
+3. 搜索年龄 20～25 岁，并按照年龄从小到大排序
+```
+GET /bank/_search
+{
+  "query": {
+    "range": {
+      "age": {
+        "gte": 20,
+        "lte": 25
+      }
+    }
+  },
+  "sort": [
+    {
+      "age": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+```
+
+4. 搜索年龄 20～25 岁，并且是女性，在 CA 或者 VA 州的
+```
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "age": {
+              "gte": 20,
+              "lte": 25
+            }
+          }
+        }
+      ],
+      "filter": [
+        {
+          "term": {
+            "gender.keyword": "F"
+          }
+        }
+      ],
+      "should": [
+        {
+          "term": {
+            "state.keyword": {
+              "value": "CA"
+            }
+          }
+        },
+        {
+          "term": {
+            "state.keyword": {
+              "value": "VA"
+            }
+          }
+        }
+      ],
+      "minimum_should_match": 1
+    }
+  }
 }
 ```
