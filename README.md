@@ -110,3 +110,90 @@ GET /bank/_search
   }
 }
 ```
+
+5. 统计 VA 州男女员工各有多少个
+```
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "state.keyword": "VA"
+          }
+        }
+      ]
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "gender_aggs": {
+      "terms": {
+        "field": "gender.keyword",
+        "size": 10
+      }
+    }
+  }
+}
+```
+
+6. 统计 VA 州平均薪资
+```
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "state.keyword": "VA"
+          }
+        }
+      ]
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "avg_balance": {
+      "avg": {
+        "field": "balance"
+      }
+    }
+  }
+}
+```
+
+7. 统计 VA 州男女平均薪资
+```
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "state.keyword": "VA"
+          }
+        }
+      ]
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "gender_aggs": {
+      "terms": {
+        "field": "gender.keyword",
+        "size": 10
+      },
+      "aggs": {
+        "avg_balance": {
+          "avg": {
+            "field": "balance"
+          }
+        }
+      }
+    }
+  }
+}
+```
