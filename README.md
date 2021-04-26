@@ -22,12 +22,12 @@ $ curl -H "Content-Type: application/json" -XPOST "localhost:9200/bank/_doc/_bul
 
 ### 基础
 
-1. 查询索引结构
+查询索引结构
 ```
 GET /bank/_mapping
 ```
 
-2. 获取所有数据，并根据 `account_number` 降序排序
+获取所有数据，并根据 `account_number` 降序排序
 ```
 GET /bank/_search
 {
@@ -44,7 +44,33 @@ GET /bank/_search
 }
 ```
 
-3. 搜索年龄 20～25 岁，并按照年龄从小到大排序
+查询名叫 `barron` 的，只获取 `lastname`, `state` 字段
+```
+GET /bank/_search
+{
+  "_source": ["lastname", "state"],
+  "query": {
+    "match": {
+      "lastname": "barron"
+    }
+  }
+}
+```
+
+查询名叫 `barron` 共有多少个
+```
+GET /bank/_search
+{
+  "query": {
+    "match": {
+      "lastname": "barron"
+    }
+  },
+  "size": 0
+}
+```
+
+搜索年龄 20～25 岁，并按照年龄从小到大排序
 ```
 GET /bank/_search
 {
@@ -66,7 +92,7 @@ GET /bank/_search
 }
 ```
 
-4. 搜索年龄 20～25 岁，并且是女性，在 CA 或者 VA 州的
+搜索年龄 20～25 岁，并且是女性，在 CA 或者 VA 州的
 ```
 GET /bank/_search
 {
@@ -111,7 +137,7 @@ GET /bank/_search
 }
 ```
 
-5. 统计 VA 州男女员工各有多少个
+统计 VA 州男女员工各有多少个
 ```
 GET /bank/_search
 {
@@ -138,7 +164,7 @@ GET /bank/_search
 }
 ```
 
-6. 统计 VA 州平均薪资
+统计 VA 州平均薪资
 ```
 GET /bank/_search
 {
@@ -164,7 +190,7 @@ GET /bank/_search
 }
 ```
 
-7. 统计 VA 州男女平均薪资
+统计 VA 州男女平均薪资
 ```
 GET /bank/_search
 {
@@ -197,3 +223,9 @@ GET /bank/_search
   }
 }
 ```
+
+### 参考
+
+[Elastic Doc](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index.html)
+
+[Elastic：菜鸟上手指南](https://elasticstack.blog.csdn.net/article/details/102728604)
